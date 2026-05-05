@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Dashboard - JobPortal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="dashboard">
+    <section class="profile-banner">
+        <div>
+            <p class="eyebrow">Student dashboard</p>
+            <h1 th:text="${user.fullName}">Student</h1>
+            <p th:text="${user.skills}">Skills</p>
+        </div>
+        <a th:href="@{/jobs}" class="wide-button inline">Browse jobs</a>
+    </section>
+    <section class="dashboard-grid">
+        <form th:action="@{/profile}" method="post" enctype="multipart/form-data" class="panel form-stack">
+            <h2>Profile and resume</h2>
+            <p th:if="${param.resumeRequired}" class="error">Please upload your resume before applying.</p>
+            <label>Name <input name="fullName" th:value="${user.fullName}" required></label>
+            <label>Phone <input name="phone" th:value="${user.phone}"></label>
+            <label>Location <input name="location" th:value="${user.location}"></label>
+            <label>Experience <input name="experience" th:value="${user.experience}"></label>
+            <label>Skills <input name="skills" th:value="${user.skills}"></label>
+            <label>Resume <input type="file" name="resume" accept=".pdf,.doc,.docx"></label>
+            <p th:if="${user.resumePath != null}" class="success">Resume uploaded and will be attached when you apply.</p>
+            <button type="submit">Update profile</button>
+        </form>
+        <section class="panel">
+            <div class="section-heading compact-head">
+                <h2>Applications</h2>
+                <input data-table-filter placeholder="Search status or company">
+            </div>
+            <table>
+                <thead><tr><th>Job</th><th>Company</th><th>Resume</th><th>Status</th></tr></thead>
+                <tbody>
+                <tr th:each="app : ${applications}" data-filter-row>
+                    <td th:text="${app.job.title}">Job</td>
+                    <td th:text="${app.job.employer.companyName}">Company</td>
+                    <td th:text="${app.resumePath != null ? 'Attached' : 'Missing'}">Attached</td>
+                    <td><span class="status" th:classappend="${app.status.name().toLowerCase()}" th:text="${app.status}">APPLIED</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </section>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

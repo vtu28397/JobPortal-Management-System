@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Applicants - JobPortal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="dashboard">
+    <section class="profile-banner">
+        <div>
+            <p class="eyebrow">Applicant tracking</p>
+            <h1>Review candidates</h1>
+        </div>
+        <a th:href="@{/employer/dashboard}" class="wide-button inline secondary">Back to dashboard</a>
+    </section>
+    <section class="panel">
+        <div class="section-heading compact-head">
+            <h2>Applications</h2>
+            <input data-table-filter placeholder="Search candidates">
+        </div>
+        <table>
+            <thead><tr><th>Candidate</th><th>Job</th><th>Skills</th><th>Resume</th><th>Status</th><th>Decision</th></tr></thead>
+            <tbody>
+            <tr th:each="app : ${applications}" data-filter-row>
+                <td th:text="${app.student.fullName}">Name</td>
+                <td th:text="${app.job.title}">Job</td>
+                <td th:text="${app.student.skills}">Skills</td>
+                <td>
+                    <a th:if="${app.resumePath != null}" th:href="@{/employer/applications/{id}/resume(id=${app.id})}">Download</a>
+                    <span th:if="${app.resumePath == null}">Not attached</span>
+                </td>
+                <td><span class="status" th:classappend="${app.status.name().toLowerCase()}" th:text="${app.status}">APPLIED</span></td>
+                <td>
+                    <form th:action="@{/employer/applications/{id}/status(id=${app.id})}" method="post" class="inline-form">
+                        <select name="status">
+                            <option value="SHORTLISTED">Shortlist</option>
+                            <option value="REJECTED">Reject</option>
+                            <option value="APPLIED">Applied</option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

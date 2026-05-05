@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Post Job - JobPortal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="auth-shell">
+    <section class="auth-card wide">
+        <p class="eyebrow">Employer tools</p>
+        <h1 th:text="${job.id == null ? 'Post a new job' : 'Edit job'}">Post job</h1>
+        <p class="helper">Jobs are sent to admin for approval before students can see and apply.</p>
+        <form th:action="@{/employer/jobs}" th:object="${job}" method="post" class="form-grid">
+            <input type="hidden" th:field="*{id}">
+            <label>Title <input th:field="*{title}" required></label>
+            <label>Category <input th:field="*{category}" required></label>
+            <label>Location <input th:field="*{location}" required></label>
+            <label>Experience <input th:field="*{experience}"></label>
+            <label>Salary <input th:field="*{salary}"></label>
+            <label>Skills <input th:field="*{skillsRequired}" required></label>
+            <label class="full">Description <textarea th:field="*{description}" rows="6" required></textarea></label>
+            <button type="submit">Save job</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

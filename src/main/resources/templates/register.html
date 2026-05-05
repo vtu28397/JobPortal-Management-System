@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register - JobPortal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="register-page">
+<div th:replace="~{fragments :: nav}"></div>
+<main class="register-shell">
+    <section class="register-window">
+        <div class="register-heading">
+            <div>
+                <h1>Create your JobPortal account</h1>
+                <p>Apply to jobs, track applications, or hire candidates from one workspace.</p>
+            </div>
+            <a th:href="@{/login}" class="employer-login-link">Employer login</a>
+        </div>
+        <p th:if="${param.registered}" class="success register-alert">Registration successful. Please login.</p>
+
+        <form th:action="@{/register}" th:object="${user}" method="post" class="register-form">
+            <p th:if="${#fields.hasAnyErrors()}" class="error register-alert">Registration failed. Please check the highlighted details.</p>
+            <div th:if="${#fields.hasAnyErrors()}" class="error-list">
+                <p th:each="err : ${#fields.allErrors()}" th:text="${err}">Registration error</p>
+            </div>
+            <fieldset class="register-choice role-choice-top">
+                <legend>Register as<span class="required-mark">*</span></legend>
+                <div class="choice-grid three-choice-grid">
+                    <label class="choice-card">
+                        <input type="radio" th:field="*{role}" value="STUDENT" checked>
+                        <span>
+                            <strong>Student</strong>
+                            <small>Search jobs and apply online</small>
+                        </span>
+                    </label>
+                    <label class="choice-card employer-choice">
+                        <input type="radio" th:field="*{role}" value="EMPLOYER">
+                        <span>
+                            <strong>Employer</strong>
+                            <small>Post jobs after admin approval</small>
+                        </span>
+                    </label>
+                    <a th:href="@{/login}" class="choice-card admin-login-choice">
+                        <span>
+                            <strong>Admin</strong>
+                            <small>Admin login only</small>
+                        </span>
+                    </a>
+                </div>
+            </fieldset>
+            <label><span class="label-text">Full name<span class="required-mark">*</span></span>
+                <input th:field="*{fullName}" placeholder="What is your name?" required>
+                <small class="field-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Name error</small>
+            </label>
+
+            <label><span class="label-text">Email ID<span class="required-mark">*</span></span>
+                <input type="email" th:field="*{email}" placeholder="Tell us your Email ID" required>
+                <small>We'll send relevant jobs and updates to this email</small>
+                <small class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</small>
+            </label>
+
+            <label>Username
+                <input th:field="*{username}" placeholder="Choose a username for login">
+                <small>You can login with this username or your email ID</small>
+                <small class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error</small>
+            </label>
+
+            <label><span class="label-text">Password<span class="required-mark">*</span></span>
+                <input type="password" th:field="*{password}" placeholder="(Minimum 6 characters)" minlength="6" required>
+                <small>This helps your account stay protected</small>
+                <small class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</small>
+            </label>
+
+            <label><span class="label-text">Mobile number<span class="required-mark">*</span></span>
+                <span class="mobile-input">
+                    <strong>+91</strong>
+                    <input th:field="*{phone}" placeholder="Enter your mobile number" pattern="[0-9]{10}" data-register-phone required>
+                </span>
+                <small>Recruiters will contact you on this number</small>
+                <small class="field-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone error</small>
+                <span class="otp-row">
+                    <button type="button" class="otp-action" data-send-register-otp>Send OTP</button>
+                    <input type="text" inputmode="numeric" maxlength="6" placeholder="Enter OTP" data-register-otp>
+                    <button type="button" class="otp-action" data-verify-register-otp>Verify</button>
+                </span>
+                <small class="otp-status" data-register-otp-status>After receiving OTP, enter it and click Verify. Register unlocks after verification.</small>
+                <input type="hidden" name="otpAccessToken" data-register-otp-token>
+                <input type="hidden" name="otpVerifiedPhone" data-register-otp-phone>
+            </label>
+
+            <fieldset class="register-choice">
+                <legend>Work status<span class="required-mark">*</span></legend>
+                <div class="choice-grid">
+                    <label class="choice-card">
+                        <input type="radio" th:field="*{experience}" value="Experienced">
+                        <span>
+                            <strong>I'm experienced</strong>
+                            <small>I have work experience excluding internships</small>
+                        </span>
+                        <b class="choice-icon">EXP</b>
+                    </label>
+                    <label class="choice-card">
+                        <input type="radio" th:field="*{experience}" value="Fresher" checked>
+                        <span>
+                            <strong>I'm a fresher</strong>
+                            <small>I am a student / Haven't worked after graduation</small>
+                        </span>
+                        <b class="choice-icon">NEW</b>
+                    </label>
+                </div>
+            </fieldset>
+
+            <div class="register-two-col">
+                <label>Company name
+                    <input th:field="*{companyName}" placeholder="For employers">
+                </label>
+                <label>Location
+                    <input th:field="*{location}" placeholder="City">
+                </label>
+            </div>
+
+            <label>Skills
+                <input th:field="*{skills}" placeholder="Java, Spring Boot, MySQL">
+            </label>
+
+            <button type="submit" class="register-submit" data-register-submit disabled>Register now</button>
+            <p class="register-footer-text">Already registered? <a th:href="@{/login}">Login here</a></p>
+        </form>
+    </section>
+</main>
+<script th:inline="javascript">
+    window.msg91RegisterConfig = {
+        widgetId: /*[[${msg91WidgetId}]]*/ "",
+        tokenAuth: /*[[${msg91TokenAuth}]]*/ ""
+    };
+</script>
+<script type="text/javascript" onload="initSendOTP({widgetId: window.msg91RegisterConfig.widgetId, tokenAuth: window.msg91RegisterConfig.tokenAuth, exposeMethods: true, success: function(data){ window.msg91LatestOtpResponse = data; }, failure: function(error){ window.msg91LatestOtpError = error; }})" src="https://verify.msg91.com/otp-provider.js"></script>
+<script th:src="@{/js/app.js(v=${#dates.createNow().time})}"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard - JobPortal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="dashboard">
+    <section class="profile-banner">
+        <div>
+            <p class="eyebrow">Admin overview</p>
+            <h1>Portal analytics</h1>
+            <p><span th:text="${#lists.size(users)}">0</span> users - <span th:text="${#lists.size(jobs)}">0</span> jobs - <span th:text="${#lists.size(applications)}">0</span> applications</p>
+        </div>
+    </section>
+    <section class="stats-grid">
+        <div class="metric"><strong th:text="${#lists.size(users)}">0</strong><span>Total users</span></div>
+        <div class="metric"><strong th:text="${#lists.size(jobs)}">0</strong><span>Total jobs</span></div>
+        <div class="metric"><strong th:text="${#lists.size(pendingJobs)}">0</strong><span>Pending approvals</span></div>
+    </section>
+
+    <section class="panel">
+        <div class="section-heading compact-head">
+            <h2>Employer job approval requests</h2>
+            <input data-table-filter placeholder="Search jobs or companies">
+        </div>
+        <table>
+            <thead><tr><th>Job</th><th>Company</th><th>Location</th><th>Salary</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+            <tr th:each="job : ${jobs}" data-filter-row>
+                <td th:text="${job.title}">Job</td>
+                <td th:text="${job.employer.companyName ?: job.employer.fullName}">Company</td>
+                <td th:text="${job.location}">Location</td>
+                <td th:text="${job.salary}">Salary</td>
+                <td><span class="status" th:classappend="${job.approvalStatus.name().toLowerCase()}" th:text="${job.approvalStatus}">PENDING</span></td>
+                <td class="table-actions">
+                    <form th:action="@{/admin/jobs/{id}/approval(id=${job.id})}" method="post">
+                        <input type="hidden" name="status" value="APPROVED">
+                        <button type="submit">Approve</button>
+                    </form>
+                    <form th:action="@{/admin/jobs/{id}/approval(id=${job.id})}" method="post">
+                        <input type="hidden" name="status" value="REJECTED">
+                        <button type="submit">Reject</button>
+                    </form>
+                    <form th:action="@{/admin/jobs/{id}/delete(id=${job.id})}" method="post">
+                        <button data-confirm="Delete this job permanently?" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="panel admin-panel-gap">
+        <div class="section-heading compact-head">
+            <h2>Candidate applications</h2>
+        </div>
+        <table>
+            <thead><tr><th>Candidate</th><th>Job</th><th>Company</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+            <tr th:each="app : ${applications}">
+                <td th:text="${app.student.fullName}">Candidate</td>
+                <td th:text="${app.job.title}">Job</td>
+                <td th:text="${app.job.employer.companyName ?: app.job.employer.fullName}">Company</td>
+                <td><span class="status" th:classappend="${app.status.name().toLowerCase()}" th:text="${app.status}">APPLIED</span></td>
+                <td>
+                    <form th:action="@{/admin/applications/{id}/delete(id=${app.id})}" method="post">
+                        <button data-confirm="Delete this candidate application?" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

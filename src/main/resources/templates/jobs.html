@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Browse Jobs - JobPortal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="page-shell">
+    <section class="page-title">
+        <p class="eyebrow">Browse opportunities</p>
+        <h1>Jobs matching your goals</h1>
+    </section>
+    <form class="filter-bar" th:action="@{/jobs}" method="get">
+        <input name="category" th:value="${category}" placeholder="Category or skill">
+        <input name="company" th:value="${company}" placeholder="Company">
+        <input name="location" th:value="${location}" placeholder="Location">
+        <input name="experience" th:value="${experience}" placeholder="Experience">
+        <button type="submit">Filter</button>
+    </form>
+    <div class="content-grid">
+        <aside class="side-panel">
+            <h2>Popular filters</h2>
+            <a th:href="@{/jobs(category='Software Development')}">Software Development</a>
+            <a th:href="@{/jobs(company='BluePeak Technologies')}">BluePeak Technologies</a>
+            <a th:href="@{/jobs(location='Remote')}">Remote</a>
+            <a th:href="@{/jobs(experience='Fresher')}">Fresher</a>
+            <a th:href="@{/jobs(experience='0-1 years')}">0-1 years</a>
+        </aside>
+        <section class="job-list">
+            <article class="job-row" th:each="job : ${jobs}">
+                <div class="company-logo" th:text="${#strings.substring(job.employer.companyName,0,1)}">B</div>
+                <div class="job-row-main">
+                    <h2 th:text="${job.title}">Job title</h2>
+                    <p th:text="${job.employer.companyName}">Company</p>
+                    <p th:text="${job.description}">Description</p>
+                    <div class="chips">
+                        <span th:text="${job.skillsRequired}">Skills</span>
+                        <span th:text="${job.location}">Location</span>
+                        <span th:text="${job.experience}">Experience</span>
+                        <span th:text="${job.salary}">Salary</span>
+                    </div>
+                </div>
+                <a th:href="@{/jobs/{id}(id=${job.id})}" class="wide-button inline">Apply</a>
+            </article>
+            <div th:if="${#lists.isEmpty(jobs)}" class="empty-state compact">
+                <h2>No jobs found</h2>
+                <p>Try a different category, location, or experience filter.</p>
+            </div>
+        </section>
+    </div>
+</main>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

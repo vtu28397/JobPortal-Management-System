@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Access Denied - JobPortal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="empty-state">
+    <h1>Access denied</h1>
+    <p>You are logged in with a role that cannot open this page.</p>
+    <a th:href="@{/dashboard}" class="wide-button inline">Go to my dashboard</a>
+</main>
+</body>
+</html>

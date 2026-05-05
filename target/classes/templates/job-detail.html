@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${job.title} + ' - JobPortal'">Job Detail</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="page-shell">
+    <section class="detail-header">
+        <div class="company-logo large" th:text="${#strings.substring(job.employer.companyName,0,1)}">B</div>
+        <div>
+            <p class="eyebrow" th:text="${job.employer.companyName}">Company</p>
+            <h1 th:text="${job.title}">Job title</h1>
+            <div class="chips">
+                <span th:text="${job.location}">Location</span>
+                <span th:text="${job.experience}">Experience</span>
+                <span th:text="${job.salary}">Salary</span>
+                <span th:text="${job.category}">Category</span>
+            </div>
+        </div>
+    </section>
+    <div class="detail-grid">
+        <article class="detail-panel">
+            <h2>Job description</h2>
+            <p th:text="${job.description}">Description</p>
+            <h2>Skills required</h2>
+            <p th:text="${job.skillsRequired}">Skills</p>
+        </article>
+        <aside class="apply-panel">
+            <h2>Apply online</h2>
+            <div th:if="${currentUser != null and currentUser.role.name() == 'STUDENT'}">
+                <p th:if="${alreadyApplied}" class="success">You already applied for this job.</p>
+                <p th:if="${!alreadyApplied and !hasResume}" class="error">Upload your resume in your profile before applying.</p>
+                <form th:if="${!alreadyApplied}" th:action="@{/applications/{id}(id=${job.id})}" method="post" class="form-stack">
+                    <label>Cover note
+                        <textarea name="coverNote" rows="5" placeholder="Write a short note for the employer"></textarea>
+                    </label>
+                    <button type="submit">Apply now</button>
+                </form>
+            </div>
+            <div th:if="${currentUser == null}">
+                <p>Login as a student to apply and track status.</p>
+                <a th:href="@{/login}" class="wide-button">Login to apply</a>
+            </div>
+        </aside>
+    </div>
+</main>
+</body>
+</html>

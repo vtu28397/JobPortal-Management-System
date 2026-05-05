@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - JobPortal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body class="auth-page">
+<div th:replace="~{fragments :: nav}"></div>
+<main class="login-shell">
+    <section class="login-window">
+        <h1>Login</h1>
+        <p th:if="${param.registered}" class="success">Registration complete. Please login.</p>
+        <p th:if="${param.error}" class="error">Invalid email ID / username or password.</p>
+        <form th:action="@{/login}" method="post" class="login-form" data-password-login-panel>
+            <label>Email ID / Username / Mobile number
+                <input type="text" name="username" placeholder="Enter Email ID / Username / Mobile number" required>
+            </label>
+            <label>Password
+                <span class="password-box">
+                    <input type="password" name="password" placeholder="Enter Password" data-password-input required>
+                    <button type="button" data-password-toggle>Show</button>
+                </span>
+            </label>
+            <a href="#" class="forgot-link">Forgot Password?</a>
+            <button type="submit" class="login-submit">Login</button>
+        </form>
+        <button type="button" class="otp-link otp-switch" data-toggle-login-otp>Use OTP to Login</button>
+        <form th:action="@{/login/otp}" method="post" class="login-form otp-login-form" data-login-otp-panel th:hidden="${otpLoginError == null}">
+            <p th:if="${otpLoginError}" class="error" th:text="${otpLoginError}">OTP login failed.</p>
+            <label>Mobile number
+                <span class="mobile-input login-mobile-input">
+                    <strong>+91</strong>
+                    <input type="text" name="phone" placeholder="Enter registered mobile number" pattern="[0-9]{10}" data-login-phone required>
+                </span>
+            </label>
+            <span class="otp-row">
+                <button type="button" class="otp-action" data-send-login-otp>Send OTP</button>
+                <input type="text" inputmode="numeric" maxlength="6" placeholder="Enter OTP" data-login-otp>
+                <button type="button" class="otp-action" data-verify-login-otp>Verify</button>
+            </span>
+            <small class="otp-status" data-login-otp-status>Verify your registered mobile number to login.</small>
+            <input type="hidden" name="otpAccessToken" data-login-otp-token>
+            <input type="hidden" name="otpVerifiedPhone" data-login-otp-phone>
+            <button type="submit" class="login-submit" data-login-otp-submit disabled>Login with OTP</button>
+        </form>
+    </section>
+</main>
+<script th:inline="javascript">
+    window.msg91RegisterConfig = {
+        widgetId: /*[[${msg91WidgetId}]]*/ "",
+        tokenAuth: /*[[${msg91TokenAuth}]]*/ ""
+    };
+</script>
+<script type="text/javascript" onload="initSendOTP({widgetId: window.msg91RegisterConfig.widgetId, tokenAuth: window.msg91RegisterConfig.tokenAuth, exposeMethods: true, success: function(data){ window.msg91LatestOtpResponse = data; }, failure: function(error){ window.msg91LatestOtpError = error; }})" src="https://verify.msg91.com/otp-provider.js"></script>
+<script th:src="@{/js/app.js(v=${#dates.createNow().time})}"></script>
+</body>
+</html>

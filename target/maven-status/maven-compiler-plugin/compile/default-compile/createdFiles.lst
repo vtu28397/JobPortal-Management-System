@@ -1,0 +1,17 @@
+com\arjun\jobportal\model\AppUser.class
+com\arjun\jobportal\model\Job.class
+com\arjun\jobportal\repository\JobRepository.class
+com\arjun\jobportal\exception\ResourceNotFoundException.class
+com\arjun\jobportal\service\Msg91OtpService$ResponseCall.class
+com\arjun\jobportal\config\DataSeeder.class
+com\arjun\jobportal\model\JobApprovalStatus.class
+com\arjun\jobportal\model\ApplicationStatus.class
+com\arjun\jobportal\repository\ApplicationRepository.class
+com\arjun\jobportal\repository\UserRepository.class
+com\arjun\jobportal\config\SecurityConfig.class
+com\arjun\jobportal\controller\MainController.class
+com\arjun\jobportal\exception\GlobalExceptionHandler.class
+com\arjun\jobportal\service\Msg91OtpService.class
+com\arjun\jobportal\JobPortalApplication.class
+com\arjun\jobportal\model\JobApplication.class
+com\arjun\jobportal\model\Role.class

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>JobPortal - Find Your Next Role</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main>
+    <section class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">Professional job portal</p>
+            <h1>Find the right job, apply faster, and track every opportunity.</h1>
+            <p>Connect students and employers through verified roles, clean dashboards, application tracking, and shortlist notifications.</p>
+            <form class="search-panel" th:action="@{/jobs}" method="get">
+                <input name="category" placeholder="Role, skills, category">
+                <input name="company" placeholder="Company">
+                <input name="location" placeholder="Location">
+                <input name="experience" placeholder="Experience">
+                <button type="submit">Search jobs</button>
+            </form>
+        </div>
+        <div class="hero-visual">
+            <div class="metric"><strong th:text="${jobCount}">0</strong><span>Open jobs</span></div>
+            <div class="metric"><strong th:text="${companyCount}">0</strong><span>Employers</span></div>
+            <div class="metric"><strong th:text="${studentCount}">0</strong><span>Students</span></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Latest openings</p>
+                <h2>Recommended jobs</h2>
+            </div>
+            <a th:href="@{/jobs}" class="link-button">View all</a>
+        </div>
+        <div class="job-grid">
+            <article class="job-card" th:each="job : ${jobs}">
+                <div class="company-logo" th:text="${#strings.substring(job.employer.companyName,0,1)}">B</div>
+                <div>
+                    <h3 th:text="${job.title}">Java Developer</h3>
+                    <p th:text="${job.employer.companyName}">Company</p>
+                </div>
+                <div class="chips">
+                    <span th:text="${job.location}">Bengaluru</span>
+                    <span th:text="${job.experience}">0-1 years</span>
+                    <span th:text="${job.salary}">4 LPA</span>
+                </div>
+                <a th:href="@{/jobs/{id}(id=${job.id})}" class="wide-button">View details</a>
+            </article>
+        </div>
+    </section>
+</main>
+<div th:replace="~{fragments :: footer}"></div>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

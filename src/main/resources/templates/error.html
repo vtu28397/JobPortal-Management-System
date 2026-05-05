@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Something went wrong</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main class="empty-state">
+    <h1>Something went wrong</h1>
+    <p th:text="${message}">Please try again.</p>
+    <a th:href="@{/}" class="wide-button inline">Go home</a>
+</main>
+</body>
+</html>

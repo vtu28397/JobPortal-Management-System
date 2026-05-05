@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="nav" class="topbar">
+    <a class="brand" th:href="@{/}">
+        <span class="brand-mark">JP</span>
+        <span>JobPortal</span>
+    </a>
+    <nav>
+        <a th:href="@{/jobs}">Jobs</a>
+        <a th:if="${loggedInUser != null and loggedInUser.role.name() == 'STUDENT'}" th:href="@{/student/dashboard}">Student</a>
+        <a th:if="${loggedInUser != null and loggedInUser.role.name() == 'EMPLOYER'}" th:href="@{/employer/dashboard}">Employer</a>
+        <a th:if="${loggedInUser != null and loggedInUser.role.name() == 'ADMIN'}" th:href="@{/admin/dashboard}">Admin</a>
+        <a th:if="${loggedInUser == null}" th:href="@{/login}" class="ghost">Login</a>
+        <a th:if="${loggedInUser == null}" th:href="@{/register}" class="primary">Register</a>
+        <form th:if="${loggedInUser != null}" th:action="@{/logout}" method="post" class="nav-form">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </nav>
+</header>
+
+<footer th:fragment="footer" class="footer">
+    <span>Job Portal Management System</span>
+    <span>Spring Boot, Thymeleaf, JPA, Security</span>
+</footer>
+</body>
+</html>
